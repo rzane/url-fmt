@@ -1,7 +1,7 @@
 {
   "name": "url-fmt",
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Format URL strings with template parameters",
   "repository": "rzane/url-fmt",
   "scripts": {
