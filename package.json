@@ -1,9 +1,27 @@
 {
   "name": "url-fmt",
   "license": "MIT",
+  "version": "0.1.0",
+  "description": "Format URL strings with template parameters",
+  "repository": "rzane/url-fmt",
   "scripts": {
     "test": "jest"
   },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "keywords": [
+    "browser",
+    "url",
+    "format",
+    "typescript",
+    "typed",
+    "parameter",
+    "params",
+    "named",
+    "routes"
+  ],
   "jest": {
     "preset": "ts-jest"
   },
