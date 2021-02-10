@@ -2,7 +2,12 @@
  * In tooltips, intersections look a little ugly. This just flattens
  * the intersections into one nice type.
  */
-type Merge<A, B> = B extends undefined ? A : { [K in keyof A & B]: (A & B)[K] };
+type Simplify<T> = { [K in keyof T]: T[K] };
+
+/**
+ * Create an intersection, but watch out for undefined.
+ */
+type Merge<A, B> = B extends undefined ? A : Simplify<A & B>;
 
 /**
  * Parse a parameter. The following parameter formats are supported:
@@ -40,7 +45,7 @@ export type Params<URL extends string> = Parse<URL>;
  * parameters argument should be optional.
  */
 type FormatArgs<Params> = Params extends undefined
-  ? [Params] | []
+  ? [{ [key: string]: never }] | []
   : {} extends Params
   ? [Params] | []
   : [Params];
