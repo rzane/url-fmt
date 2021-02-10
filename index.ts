@@ -2,7 +2,7 @@
  * In tooltips, intersections look a little ugly. This just flattens
  * the intersections into one nice type.
  */
-type Simplify<T> = { [K in keyof T]: T[K] };
+type Merge<A, B> = B extends undefined ? A : { [K in keyof A & B]: (A & B)[K] };
 
 /**
  * Parse a parameter. The following parameter formats are supported:
@@ -23,12 +23,12 @@ type ParseParam<T extends string> = T extends `${infer Name}?`
  * Chew through a string, looking for parameters.
  */
 type Parse<T> = T extends `/:${infer Name}/${infer Next}`
-  ? Simplify<ParseParam<Name> & Parse<`/${Next}`>>
+  ? Merge<ParseParam<Name>, Parse<`/${Next}`>>
   : T extends `/:${infer Name}`
   ? ParseParam<Name>
   : T extends `${infer _}${infer Next}`
   ? Parse<Next>
-  : { [key: string]: never };
+  : undefined;
 
 /**
  * Extract the URL parameters from a string.
@@ -48,7 +48,12 @@ const RE_SLASH_TRAILING = /\/$/;
  * If the URL doesn't have any required parameters, the
  * parameters argument should be optional.
  */
-type OptionalArgs<T> = {} extends T ? [T] | [] : [T];
+type OptionalArgs<T> = T extends undefined
+  ? [T] | []
+  : {} extends T
+  ? [T] | []
+  : [T];
+
 type FormatArgs<T extends string> = OptionalArgs<Params<T>>;
 
 /**
