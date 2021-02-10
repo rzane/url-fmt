@@ -10,6 +10,11 @@ type Simplify<T> = { [K in keyof T]: T[K] };
 type Merge<A, B> = B extends undefined ? A : Simplify<A & B>;
 
 /**
+ * Represents the value of a URL parameter.
+ */
+type Value = string | number;
+
+/**
  * Parse a parameter. The following parameter formats are supported:
  *   - :name - Required
  *   - :name+ - Required
@@ -17,12 +22,12 @@ type Merge<A, B> = B extends undefined ? A : Simplify<A & B>;
  *   - :name* - Optional
  */
 type ParseParam<T extends string> = T extends `${infer Name}?`
-  ? { [key in Name]?: string | number }
+  ? { [key in Name]?: Value }
   : T extends `${infer Name}*`
-  ? { [key in Name]?: string | number }
+  ? { [key in Name]?: Value | Value[] }
   : T extends `${infer Name}+`
-  ? { [key in Name]: string | number }
-  : { [key in T]: string | number };
+  ? { [key in Name]: Value | [Value, ...Value[]] }
+  : { [key in T]: Value };
 
 /**
  * Chew through a string, looking for parameters.
