@@ -14,6 +14,11 @@ test("format", () => {
   );
 });
 
+test("format optional in the middle of the URL", () => {
+  expect(format("/a/:b?/c")).toEqual("/a/c");
+  expect(format("/a/:b?/c", { b: "b" })).toEqual("/a/b/c");
+});
+
 test("format errors when a required parameter is missing", () => {
   expect(() => format("/users/:id", {} as any)).toThrow();
   expect(() => format("/users/:id+", {} as any)).toThrow();

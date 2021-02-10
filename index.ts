@@ -41,7 +41,8 @@ export type Params<URL extends string> = Parse<URL>;
 const BLANK = "";
 const EMPTY_OBJECT = {};
 
-const RE_PARAMETER = /:(\w+)([\?\*]?)/g;
+const RE_PARAMETER = /:(\w+)([\?\*\+]?)/g;
+const RE_SLASH_REPEAT = /([^:]\/)\/+/g;
 const RE_SLASH_TRAILING = /\/$/;
 
 /**
@@ -65,16 +66,19 @@ export function format<URL extends string>(
 ): string {
   const params = args[0] || EMPTY_OBJECT;
 
-  const resolve = (_match: string, name: string, optional: string) => {
+  const resolve = (_match: string, name: string, mode: string) => {
     const value = (params as any)[name];
 
     if (value !== undefined) return value;
-    if (optional) return "";
+    if (mode === "?" || mode === "*") return "";
 
     throw new Error(`Parameter '${name}' is required in '${url}'`);
   };
 
-  return url.replace(RE_PARAMETER, resolve).replace(RE_SLASH_TRAILING, BLANK);
+  return url
+    .replace(RE_PARAMETER, resolve)
+    .replace(RE_SLASH_REPEAT, "$1")
+    .replace(RE_SLASH_TRAILING, BLANK);
 }
 
 /**
