@@ -49,18 +49,20 @@ export type Params<URL extends string> = Flatten<Parse<URL>>;
  * If the URL doesn't have any required parameters, the
  * parameters argument should be optional.
  */
-type FormatArgs<Params> = Params extends undefined
+type OptionalArgs<Params> = Params extends undefined
   ? [{ [key: string]: never }] | []
   : {} extends Params
   ? [Params] | []
   : [Params];
+
+export type FormatArgs<URL extends string> = OptionalArgs<Params<URL>>;
 
 /**
  * Format the URL
  */
 export function format<URL extends string>(
   url: URL,
-  ...args: FormatArgs<Params<URL>>
+  ...args: FormatArgs<URL>
 ): string;
 
 /**
@@ -75,7 +77,4 @@ interface Routes {
  */
 export function createNamedRoutes<R extends Routes>(
   routes: R
-): <Name extends keyof R>(
-  name: Name,
-  ...args: FormatArgs<Params<R[Name]>>
-) => string;
+): <Name extends keyof R>(name: Name, ...args: FormatArgs<R[Name]>) => string;
