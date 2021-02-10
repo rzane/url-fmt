@@ -1,4 +1,6 @@
 {
+  "name": "url-fmt",
+  "license": "MIT",
   "scripts": {
     "test": "jest"
   },
