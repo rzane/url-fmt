@@ -2,12 +2,12 @@
  * In tooltips, intersections look a little ugly. This just flattens
  * the intersections into one nice type.
  */
-type Simplify<T> = { [K in keyof T]: T[K] };
+type Flatten<T> = { [K in keyof T]: T[K] };
 
 /**
  * Create an intersection, but watch out for undefined.
  */
-type Merge<A, B> = B extends undefined ? A : Simplify<A & B>;
+type Merge<A, B> = B extends undefined ? A : A & B;
 
 /**
  * Represents the value of a URL parameter.
@@ -36,14 +36,14 @@ type Parse<T> = T extends `/:${infer Name}/${infer Next}`
   ? Merge<ParseParam<Name>, Parse<`/${Next}`>>
   : T extends `/:${infer Name}`
   ? ParseParam<Name>
-  : T extends `${infer _}${infer Next}`
-  ? Parse<Next>
+  : T extends `${infer _}/:${infer Next}`
+  ? Parse<`/:${Next}`>
   : undefined;
 
 /**
  * Extract the URL parameters from a string.
  */
-export type Params<URL extends string> = Parse<URL>;
+export type Params<URL extends string> = Flatten<Parse<URL>>;
 
 /**
  * If the URL doesn't have any required parameters, the
