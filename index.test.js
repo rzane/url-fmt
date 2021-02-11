@@ -5,6 +5,10 @@ describe("format", () => {
     expect(format("/users")).toEqual("/users");
   });
 
+  test("does not remove root slash", () => {
+    expect(format("/")).toEqual("/");
+  });
+
   test("required param", () => {
     expect(format("/users/:id", { id: "9" })).toEqual("/users/9");
     expect(format("/users/:id", { id: 9 })).toEqual("/users/9");

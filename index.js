@@ -3,7 +3,6 @@
  */
 const RE_PARAMETER = /:(\w+)([\?\*\+]?)/g;
 const RE_SLASH_REPEAT = /([^:]\/)\/+/g;
-const RE_SLASH_TRAILING = /\/$/;
 
 const join = (value) => {
   if (Array.isArray(value)) {
@@ -39,10 +38,7 @@ const format = (url, params) => {
     throw new Error(`Parameter '${name}' is required in '${url}'`);
   };
 
-  return url
-    .replace(RE_PARAMETER, resolve)
-    .replace(RE_SLASH_REPEAT, "$1")
-    .replace(RE_SLASH_TRAILING, "");
+  return url.replace(RE_PARAMETER, resolve).replace(RE_SLASH_REPEAT, "$1");
 };
 
 /**
