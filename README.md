@@ -21,6 +21,8 @@ This package uses Typescript's template literals to parse the URL and generate a
 
 #### `format`
 
+This function will take a URL template and replace named parameters. The parameters passed to this function will be strictly validated by TypeScript. The parameter types are inferred from the URL template.
+
 ```typescript
 import { format } from "url-fmt";
 
@@ -35,6 +37,10 @@ format("/users/:id", {}); // error
 ```
 
 #### `createNamedRoutes`
+
+This function allows you to define named routes in your application. Named routes are a good practice because they'll allow you to decouple your URLs from application code.
+
+The function returned from `createNamedRoutes` takes a route name and parameters. The parameters will be inferred from the URL template and will be strictly validated by TypeScript.
 
 ```typescript
 import { createNamedRoutes } from "url-fmt";
@@ -52,9 +58,9 @@ route("user", { id: 1 });
 
 ## Syntax
 
-| Syntax    | Type                                                                 |
-| --------- | -------------------------------------------------------------------- |
-| `:param`  | `string \| number`                                                   |
-| `:param?` | `string \| number \| undefined`                                      |
-| `:param*` | `string \| number \| undefined \| Array<string \| number>`           |
-| `:param+` | `string \| number \| [string \| number, ...Array<string \| number>]` |
+| Syntax    | Meaning               | Type                                                                 |
+| --------- | --------------------- | -------------------------------------------------------------------- |
+| `:param`  | One required segment  | `string \| number`                                                   |
+| `:param?` | One optional segment  | `string \| number \| undefined`                                      |
+| `:param*` | Zero or more segments | `string \| number \| undefined \| Array<string \| number>`           |
+| `:param+` | One or more segment   | `string \| number \| [string \| number, ...Array<string \| number>]` |
