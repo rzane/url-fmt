@@ -3,6 +3,7 @@
  */
 const RE_PARAMETER = /:(\w+)([\?\*\+]?)/g;
 const RE_SLASH_REPEAT = /([^:]\/)\/+/g;
+const RE_SLASH_TRAILING = /^(.+)\/$/;
 
 const join = (value) => {
   if (Array.isArray(value)) {
@@ -19,12 +20,12 @@ const isEmptyArray = (value) => {
 /**
  * Format a URL
  */
-const format = (url, params) => {
+const format = (template, params) => {
   const resolve = (_match, name, mode) => {
     const value = params && params[name];
 
     if (mode === "+" && isEmptyArray(value)) {
-      throw new Error(`One or more '${name}' is required in '${url}'`);
+      throw new Error(`One or more '${name}' is required in '${template}'`);
     }
 
     if (value !== undefined && value !== "") {
@@ -35,10 +36,13 @@ const format = (url, params) => {
       return "";
     }
 
-    throw new Error(`Parameter '${name}' is required in '${url}'`);
+    throw new Error(`Parameter '${name}' is required in '${template}'`);
   };
 
-  return url.replace(RE_PARAMETER, resolve).replace(RE_SLASH_REPEAT, "$1");
+  return template
+    .replace(RE_PARAMETER, resolve)
+    .replace(RE_SLASH_REPEAT, "$1")
+    .replace(RE_SLASH_TRAILING, "$1");
 };
 
 /**

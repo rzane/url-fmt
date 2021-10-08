@@ -7,6 +7,7 @@ describe("format", () => {
 
   test("does not remove root slash", () => {
     expect(format("/")).toEqual("/");
+    expect(format("/:path*", { path: "" })).toEqual("/");
   });
 
   test("required param", () => {
